@@ -1,0 +1,38 @@
+name: Benchmarks
+
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Using actions/setup-python to install python and not uv install is critical for tracing to work properly
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.10"
+
+      - name: Install uv (official Astral action)
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install all dependencies
+        run: uv sync --all-extras --dev
+
+      # - name: Start Redis
+      #   uses: supercharge/redis-github-action@1.8.0
+
+      - name: Run the benchmarks
+        uses: CodSpeedHQ/action@v4
+        with:
+          mode: instrumentation
+          run: uv run pytest tests/ --codspeed
+          token: ${{ secrets.CODSPEED_TOKEN }} # optional for public repos

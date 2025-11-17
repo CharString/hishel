@@ -14,6 +14,8 @@ from hishel import AsyncSqliteStorage, Request, Response
 from hishel._utils import make_async_iterator
 from tests.conftest import aprint_sqlite_state
 
+pytestmark = pytest.mark.benchmark
+
 
 @pytest.mark.anyio
 @travel(datetime(2024, 1, 1, 0, 0, 0, tzinfo=ZoneInfo("UTC")))
