@@ -14,6 +14,7 @@ from hishel import SyncSqliteStorage, Request, Response
 from hishel._utils import make_sync_iterator
 from tests.conftest import print_sqlite_state
 
+pytestmark = pytest.mark.benchmark
 
 
 @travel(datetime(2024, 1, 1, 0, 0, 0, tzinfo=ZoneInfo("UTC")))
